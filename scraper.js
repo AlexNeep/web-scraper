@@ -67,7 +67,7 @@ async function scrapeLocationDirect(country, city, baseURL, browser) {
   await page.setDefaultNavigationTimeout(0);
   await page.goto(url);
 
-  scrapePage(page, country, city);
+  await scrapePage(page, country, city);
 
   await page.close();
 }
@@ -83,7 +83,8 @@ async function scrapeLocationGoogle(country, city, browser) {
     first_link_url = await first_link_url.jsonValue();
     await page.goto(first_link_url);
 
-    scrapePage(page, country, city);
+    await scrapePage(page, country, city);
+    await page.close();
   } catch (error) {
     console.log(error);
   }
@@ -99,8 +100,9 @@ cycleThroughCities = async (city_list, baseURL) => {
   let counter = 0;
 
   const browser = await puppeteer.launch();
+  const start = 39; //did 18 then it crashed
 
-  for (let counter = 0; counter < city_list.length; ) {
+  for (let counter = start; counter < city_list.length; ) {
     // await scrapeLocationDirect(
     //   city_list[counter].country.replace(/\s/g, "-"),
     //   city_list[counter].city.replace(/\s/g, "-"),
@@ -260,4 +262,4 @@ const cities_with_no_descriptions = [
 ];
 // const city_list = defineUniqueCities();
 const city_list = cities_with_no_descriptions;
-cycleThroughCities(city_list, baseURL);
+// cycleThroughCities(city_list, baseURL);

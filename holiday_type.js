@@ -1035,7 +1035,7 @@ async function getTypes(file) {
   // console.log(`Countries with Descriptions: ${success_count}\nCountries without Descriptions : ${failed_count}`);
 }
 
-// getTypes("descriptions_all.txt");
+getTypes("descriptions_all_extended.txt");
 // getTypes("test.txt");
 
 async function getWords(file) {
@@ -1088,6 +1088,7 @@ async function getWords(file) {
   // calculateCommonWords(all_words, word_count);
 }
 
+// Used to find which citites did not work directely. Used Indirect Google Crawl to find these..
 async function getNoDescriptionCities(file) {
   const fileStream = fs.createReadStream(file);
   let desc_line = false;
@@ -1127,4 +1128,4 @@ async function getNoDescriptionCities(file) {
     `Countries with Descriptions: ${success_count}\nCountries without Descriptions : ${failed_count}`
   );
 }
-getNoDescriptionCities("descriptions_all.txt");
+// getNoDescriptionCities("descriptions_all.txt");
