@@ -1035,7 +1035,7 @@ async function getTypes(file) {
   // console.log(`Countries with Descriptions: ${success_count}\nCountries without Descriptions : ${failed_count}`);
 }
 
-getTypes("descriptions_all.txt");
+// getTypes("descriptions_all.txt");
 // getTypes("test.txt");
 
 async function getWords(file) {
@@ -1087,3 +1087,44 @@ async function getWords(file) {
   // console.log(`Countries with Descriptions: ${success_count}\nCountries without Descriptions : ${failed_count}`);
   // calculateCommonWords(all_words, word_count);
 }
+
+async function getNoDescriptionCities(file) {
+  const fileStream = fs.createReadStream(file);
+  let desc_line = false;
+
+  let current_country = "";
+  let current_city = "";
+
+  let success_count = 0;
+  let failed_count = 0;
+
+  const rl = readline.createInterface({
+    input: fileStream,
+    crlfDelay: Infinity,
+  });
+
+  for await (const line of rl) {
+    // Each line in input.txt will be successively available here as `line`.
+    if (!desc_line) {
+      let temp = line.split(",");
+      current_country = temp[0];
+      current_city = temp[1];
+    } else {
+      current_desc = line;
+      if (line === "No Description") {
+        // classifyType();
+        console.log(
+          `{"country":"${current_country}","city":"${current_city}"},`
+        );
+        failed_count++;
+      } else {
+        success_count++;
+      }
+    }
+    desc_line = !desc_line;
+  }
+  console.log(
+    `Countries with Descriptions: ${success_count}\nCountries without Descriptions : ${failed_count}`
+  );
+}
+getNoDescriptionCities("descriptions_all.txt");
